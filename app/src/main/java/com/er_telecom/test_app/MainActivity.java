@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Interpreter interpreter = null;
 
-    private String modelName;
     private FirebaseRemoteConfig mFirebaseRemoteConfig = null;
     private Boolean modelReady = false;
     private static final String TAG = "UnFunc";
@@ -59,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private void onPredictClicked() {
         float x = Float.parseFloat(X.getText().toString());
         float y = Float.parseFloat(Y.getText().toString());
-
-        prediction.setText( Float.toString(predict(x, y)));
+        float z = predict(x, y);
+        prediction.setText(z == -1? "Что то пошло не так..." : Float.toString(z));
     }
 
     private void initializeModelFromRemoteConfig(){
@@ -77,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Boolean> task) {
                         if (task.isSuccessful()) {
                             Boolean updated = task.getResult();
-                            modelName = mFirebaseRemoteConfig.getString("model_name");
-                            Log.d("UnFunc", "Config params updated: " + updated.toString() + ", model name is " + modelName);
-                            loadModel();
+                            Log.d("UnFunc", "Config params updated: " + updated.toString());
+                            if (updated == true)
+                                loadModel();
                         }
                         else {
-                            Log.d("UnFunc", "Config params is failed");
+                            Log.d("UnFunc", "Config params is failed: " + task.getException());
                         }
                     }
                 }
