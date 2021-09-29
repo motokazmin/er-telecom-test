@@ -77,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Boolean updated = task.getResult();
                             Log.d("UnFunc", "Config params updated: " + updated.toString());
-                            if (updated == true)
-                                loadModel();
+                            loadModel();
                         }
                         else {
                             Log.d("UnFunc", "Config params is failed: " + task.getException());
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             .build();
 
         FirebaseModelDownloader.getInstance()
-            .getModel("FindFunc", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, conditions)
+            .getModel("FindFunc", DownloadType.LATEST_MODEL, conditions)
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
